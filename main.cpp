@@ -5,6 +5,7 @@
 
 #include "blurred_pixel_vectorizer.hpp"
 #include "svm_model.hpp"
+#include "nn_model.hpp"
 #include "mnist.hpp"
 
 #define MNIST_TRAINING_IMAGE_FILE "../MNIST/train-images-idx3-ubyte"
@@ -45,17 +46,21 @@ void TrainAndTest(Model& model, const Vectorizer& vectorizer,
   model.Predict(testing_vectors, &predicted_labels);
 
   std::cout << "Prediction finished" << std::endl;
-  std::cout << predicted_labels.size() << " " << testing_labels.size()
-            << std::endl;
+
+  cv::Mat confusion_matrix = cv::Mat::zeros(10, 10, CV_32S);
   unsigned count = 0, correct = 0;
   for (int i = 0; i < predicted_labels.rows; i++) {
     count += 1;
-    if (predicted_labels.at<uint8_t>(0, i) ==
-        testing_labels.at<uint8_t>(0, i)) {
+    int predicted = predicted_labels.at<float>(0, i);
+    int actual = testing_labels.at<float>(0, i);
+    confusion_matrix.at<unsigned>(actual, predicted) += 1;
+    if (predicted == actual) {
       correct += 1;
     }
   }
   std::cout << "Got " << correct << " out of " << count << std::endl;
+  std::cout << "Confusion matrix:" << std::endl;
+  std::cout << confusion_matrix << std::endl;
 }
 
 int main(int argc, char* argv[]) {
@@ -70,12 +75,15 @@ int main(int argc, char* argv[]) {
 
   std::cout << "Finished loading MNIST" << std::endl;
 
-  SVMModel model;
+  NNModel model;
   BlurredPixelVectorizer vectorizer(1, 1);
 
   // Use only the first 100 test examples (for debugging)
-  training_images.resize(1000);
-  training_labels.resize(1000);
+  training_images.resize(6000);
+  training_labels.resize(6000);
+
+  testing_images.resize(10000);
+  testing_labels.resize(10000);
 
   TrainAndTest(model, vectorizer, training_images, training_labels,
                testing_images, testing_labels);

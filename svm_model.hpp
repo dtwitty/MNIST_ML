@@ -15,10 +15,6 @@
 
 class SVMModel : public Model {
  public:
-  // This will take ownership of the vectorizer,
-  // destroying it when this SVMModel is destroyed
-  // The arguments passed to this constructor are passed to
-  // the constructor of the vectorizer
   SVMModel() { svm_.reset(new CvSVM); }
 
   virtual void Train(const cv::Mat& training_vectors,
@@ -28,9 +24,10 @@ class SVMModel : public Model {
     params.svm_type = CvSVM::C_SVC;
     // RBF kernel
     params.kernel_type = CvSVM::RBF;
+    params.term_crit = cvTermCriteria(CV_TERMCRIT_ITER, 100, 1e-6);
     // Train with 10-fold cross validation
     svm_->train_auto(training_vectors, training_labels, cv::Mat(), cv::Mat(),
-                     params, 10);
+                     params, 3);
     CvSVMParams trained_params = svm_->get_params();
     std::cout << "SVM C: " << trained_params.C << std::endl;
   }
