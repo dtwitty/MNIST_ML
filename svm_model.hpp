@@ -1,6 +1,5 @@
 /*
- *  Model that takes in a vectorizer and uses an :Autoformat
- *  a
+ *  Model implementation based on SVM
  */
 
 #ifndef SVM_MODEL
