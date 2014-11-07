@@ -58,6 +58,7 @@ void TrainAndTest(Model& model, const Vectorizer& vectorizer,
       correct += 1;
     }
   }
+
   std::cout << "Got " << correct << " out of " << count << std::endl;
   std::cout << "Confusion matrix:" << std::endl;
   for (int i = 0; i < 10; i++) {
@@ -80,7 +81,7 @@ int main(int argc, char* argv[]) {
 
   std::cout << "Finished loading MNIST" << std::endl;
 
-  SVMModel model;
+  NNModel model;
   BlurredPixelVectorizer vectorizer(1, 1);
 
   // Use only the first n test examples (for debugging)
