@@ -61,12 +61,14 @@ void TrainAndTest(Model& model, const Vectorizer& vectorizer,
 
   std::cout << "Got " << correct << " out of " << count << std::endl;
   std::cout << "Confusion matrix:" << std::endl;
+
   for (int i = 0; i < 10; i++) {
     for (int j = 0; j < 10; j++) {
       printf("%7d", confusion_matrix.at<unsigned>(i, j));
     }
     std::cout << std::endl;
   }
+
 }
 
 int main(int argc, char* argv[]) {
