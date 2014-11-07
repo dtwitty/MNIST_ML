@@ -44,7 +44,6 @@ void TrainAndTest(Model& model, const Vectorizer& vectorizer,
 
   cv::Mat predicted_labels;
   model.Predict(testing_vectors, &predicted_labels);
-
   std::cout << "Prediction finished" << std::endl;
 
   cv::Mat confusion_matrix = cv::Mat::zeros(10, 10, CV_32S);
@@ -75,15 +74,15 @@ int main(int argc, char* argv[]) {
 
   std::cout << "Finished loading MNIST" << std::endl;
 
-  NNModel model;
+  SVMModel model;
   BlurredPixelVectorizer vectorizer(1, 1);
 
   // Use only the first 100 test examples (for debugging)
-  training_images.resize(6000);
-  training_labels.resize(6000);
+  training_images.resize(100);
+  training_labels.resize(100);
 
-  testing_images.resize(10000);
-  testing_labels.resize(10000);
+  testing_images.resize(100);
+  testing_labels.resize(100);
 
   TrainAndTest(model, vectorizer, training_images, training_labels,
                testing_images, testing_labels);
