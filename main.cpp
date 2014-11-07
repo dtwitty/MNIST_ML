@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <stdio.h>
 
 #include <opencv2/core/core.hpp>
 
@@ -59,7 +60,12 @@ void TrainAndTest(Model& model, const Vectorizer& vectorizer,
   }
   std::cout << "Got " << correct << " out of " << count << std::endl;
   std::cout << "Confusion matrix:" << std::endl;
-  std::cout << confusion_matrix << std::endl;
+  for (int i = 0; i < 10; i++) {
+    for (int j = 0; j < 10; j++) {
+      printf("%7d", confusion_matrix.at<unsigned>(i, j));
+    }
+    std::cout << std::endl;
+  }
 }
 
 int main(int argc, char* argv[]) {
@@ -77,12 +83,12 @@ int main(int argc, char* argv[]) {
   SVMModel model;
   BlurredPixelVectorizer vectorizer(1, 1);
 
-  // Use only the first 100 test examples (for debugging)
-  training_images.resize(100);
-  training_labels.resize(100);
+  // Use only the first n test examples (for debugging)
+  training_images.resize(60000);
+  training_labels.resize(60000);
 
-  testing_images.resize(100);
-  testing_labels.resize(100);
+  testing_images.resize(10000);
+  testing_labels.resize(10000);
 
   TrainAndTest(model, vectorizer, training_images, training_labels,
                testing_images, testing_labels);
