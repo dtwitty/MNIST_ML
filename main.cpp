@@ -68,7 +68,6 @@ void TrainAndTest(Model& model, const Vectorizer& vectorizer,
     }
     std::cout << std::endl;
   }
-
 }
 
 int main(int argc, char* argv[]) {

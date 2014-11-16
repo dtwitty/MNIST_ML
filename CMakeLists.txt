@@ -10,3 +10,4 @@ file(GLOB EyeSore_SRC
 add_executable( EyeSore ${EyeSore_SRC} )
 list( APPEND CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS} -g -O2")
 target_link_libraries( EyeSore ${OpenCV_LIBS} )
+set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
