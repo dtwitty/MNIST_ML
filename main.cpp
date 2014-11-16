@@ -11,6 +11,7 @@
 #include "mnist.hpp"
 #include "morphological_pre_processor.hpp"
 #include "euler_number_extractor.hpp"
+#include "pca_model.hpp"
 
 #define MNIST_TRAINING_IMAGE_FILE "../MNIST/train-images-idx3-ubyte"
 #define MNIST_TESTING_IMAGE_FILE "../MNIST/t10k-images-idx3-ubyte"
