@@ -55,3 +55,9 @@ void EulerNumberExtractor::ExtractFeatures(const cv::Mat& input_image,
   }
   extracted_features->push_back((c_1 - c_2 + 2 * c_3) / 4);
 }
+
+int EulerNumberExtractor::GetEulerNumber(const cv::Mat& input_image) {
+  cv::Mat res;
+  ExtractFeatures(input_image, &res);
+  return res.at<int>(0,0);
+}

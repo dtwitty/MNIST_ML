@@ -3,11 +3,14 @@
 #include <stdio.h>
 
 #include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 #include "blurred_pixel_vectorizer.hpp"
 #include "svm_model.hpp"
 #include "nn_model.hpp"
 #include "mnist.hpp"
+#include "morphological_pre_processor.hpp"
+#include "euler_number_extractor.hpp"
 
 #define MNIST_TRAINING_IMAGE_FILE "../MNIST/train-images-idx3-ubyte"
 #define MNIST_TESTING_IMAGE_FILE "../MNIST/t10k-images-idx3-ubyte"
@@ -81,6 +84,31 @@ int main(int argc, char* argv[]) {
   ReadMNISTLabels(MNIST_TESTING_LABELS_FILE, &testing_labels);
 
   std::cout << "Finished loading MNIST" << std::endl;
+
+  // DEBUGGING - close the image and take its euler number.
+  // If the euler number is weird, display the image
+  /*
+  EulerNumberExtractor euler(50);
+  MorphologicalPreProcessor morph(2, 2, ELLIPSE, CLOSE);
+
+  for (cv::Mat& image : training_images) {
+    cv::Mat out;
+    morph.PreProcess(image, &out);
+    image = out;
+  }
+  for (int i = 0; i < 100; i++) {
+    int label = training_labels.at<float>(0,i);
+    int euler_number = euler.GetEulerNumber(training_images[i]);
+    printf("Label: %d, Euler number: %d\n", label, euler_number);
+    if (euler_number > -5) {
+      cv::Mat image = training_images[i];
+      cv::namedWindow( "Display window", cv::WINDOW_AUTOSIZE );
+      cv::imshow( "Display window", image );
+
+      cv::waitKey(0);
+    }
+  }
+  */
 
   NNModel model;
   BlurredPixelVectorizer vectorizer(1, 1);

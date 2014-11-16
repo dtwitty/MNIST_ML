@@ -23,6 +23,9 @@ class EulerNumberExtractor : public FeautureExtractor {
   // Image should be of type unsigned char!!
   void ExtractFeatures(const cv::Mat& input_image, cv::Mat* extracted_features);
 
+  // Extract euler number as an integer
+  int GetEulerNumber(const cv::Mat& input_image);
+
  private:
   // Count the number of occurences of a 2 * 2 binary kernel in an image
   int CountKernel(const cv::Mat& input_image, const unsigned char kernel[4]);
