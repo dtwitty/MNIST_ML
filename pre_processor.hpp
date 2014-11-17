@@ -14,6 +14,12 @@ class PreProcessor {
  public:
   virtual void PreProcess(const cv::Mat& input_image,
                             cv::Mat* output_image) = 0;
+  
+  virtual cv::Mat operator() (const cv::Mat& input_image) {
+    cv::Mat output_image;
+    PreProcess(input_image, &output_image);
+    return output_image;
+  }
 };
 
 #endif  // PRE_PROCESSOR

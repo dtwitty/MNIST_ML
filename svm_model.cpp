@@ -1,26 +1,27 @@
 #include "svm_model.hpp"
 
-SVMModel::SVMModel() { svm_.reset(new CvSVM); }
+SVMModel::SVMModel() { 
+  svm_.reset(new CvSVM);
+  params_.svm_type = CvSVM::NU_SVC;
+  params_.nu = 0.1;
+  params_.kernel_type = CvSVM::POLY;
+  params_.degree = 4;
+}
+
+SVMModel::SVMModel(CvSVMParams params) {
+  svm_.reset(new CvSVM);
+  params_ = params;
+}
+
 
 void SVMModel::Train(const cv::Mat& training_vectors,
                      const cv::Mat& training_labels) {
-  // Set up SVM parameters
-  CvSVMParams params;
-
-  // Using nu svm
-  params.svm_type = CvSVM::NU_SVC;
-  params.nu = 0.1;
-  // Kernel is degree-4 polynomial
-  params.kernel_type = CvSVM::POLY;
-  params.degree = 4;
 
   // Stop after 100 iterations or small change threshold
-  params.term_crit = cvTermCriteria(CV_TERMCRIT_ITER, 100, 1e-6);
+  params_.term_crit = cvTermCriteria(CV_TERMCRIT_ITER, 100, 1e-6);
 
   // Train
-  svm_->train(training_vectors, training_labels, cv::Mat(), cv::Mat(), params);
-
-  CvSVMParams trained_params = svm_->get_params();
+  svm_->train(training_vectors, training_labels, cv::Mat(), cv::Mat(), params_);
 }
 
 void SVMModel::Predict(const cv::Mat& test_vectors, cv::Mat* predicted_labels) {

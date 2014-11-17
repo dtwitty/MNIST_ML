@@ -1,17 +1,23 @@
 #include "nn_model.hpp"
 
-NNModel::NNModel() { nn_.reset(new CvANN_MLP); }
+NNModel::NNModel() : NNModel(cv::Mat(1, 1, CV_32S, 300)) {}
+
+NNModel::NNModel(const cv::Mat& layer_sizes)
+    : nn_(new CvANN_MLP), layer_sizes_(layer_sizes) {}
 
 void NNModel::Train(const cv::Mat& training_vectors,
                     const cv::Mat& training_labels) {
   // Set up network topology
-  cv::Mat layers(3, 1, CV_32S);
-  // Input layer
+  int num_hidden_layers = layer_sizes_.rows;
+  cv::Mat layers(num_hidden_layers + 2, 1, CV_32S);
+
+  // Input layer is same size as training vector
   layers.at<int>(0, 0) = training_vectors.cols;
-  // Hidden layer
-  layers.at<int>(1, 0) = 300;
-  // Output layer
-  layers.at<int>(2, 0) = 10;
+  // Output layer must be of size num_classes
+  layers.at<int>(num_hidden_layers + 1, 0) = 10;
+  for (int i = 0; i < num_hidden_layers; i++) {
+    layers.at<int>(i + 1, 0) = layer_sizes_.at<int>(i, 0);
+  }
   nn_->create(layers);
 
   // Expand training set

@@ -15,7 +15,15 @@
 
 class SVMModel : public Model {
  public:
+  //  Use default parameters
+  //    SVM_TYPE: NU_SVC
+  //    NU: 0.1
+  //    KERNEL_TYPE: POLY
+  //    DEGREE: 4
   SVMModel();
+
+  //  Set parameters
+  SVMModel(CvSVMParams params);
 
   void Train(const cv::Mat& training_vectors, const cv::Mat& training_labels);
 
@@ -27,6 +35,7 @@ class SVMModel : public Model {
 
  private:
   std::unique_ptr<CvSVM> svm_;
+  CvSVMParams params_;
 };
 
 #endif  // SVM_MODEL

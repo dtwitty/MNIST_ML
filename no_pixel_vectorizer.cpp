@@ -10,23 +10,22 @@ NoPixelVectorizer::NoPixelVectorizer()
       euler_(new EulerNumberExtractor(50)),
       hu_(new HuMomentsExtractor()) {}
 
-void NoPixelVectorizer::Vectorize(const cv::Mat& input_ima,
-                             cv::Mat* feature_vector) const {
-  cv::Mat input_imag, input_image;
+void NoPixelVectorizer::Vectorize(const cv::Mat& input_image,
+                                  cv::Mat* feature_vector) const {
   DeskewPreProcessor deskew;
-  deskew.PreProcess(input_ima, &input_imag);
+  cv::Mat deskewed = deskew(input_image);
 
-  BlurPreProcessor blur(1,1);
-  blur.PreProcess(input_imag, &input_image);
-  
-  HOGExtractor hog;
-  hog.ExtractFeatures(input_image, feature_vector);
-  *feature_vector = feature_vector->t();
-  
- 
+  BlurPreProcessor blur(2,2);
+  cv::Mat blurred = blur(deskewed);
+
+  HOGExtractor hog(20, 16, 2);
+  hog.ExtractFeatures(blurred, feature_vector);
+
+  cv::normalize(*feature_vector, *feature_vector);
+  /*
   // Close the image
   cv::Mat closed;
-  morph_->PreProcess(input_image, &closed);
+  morph_->PreProcess(deskewed, &closed);
 
   // Extract euler number
   float euler_number = euler_->GetEulerNumber(closed);
@@ -34,9 +33,9 @@ void NoPixelVectorizer::Vectorize(const cv::Mat& input_ima,
 
   // Get Hu Moments
   cv::Mat hu_moments;
-  hu_->ExtractFeatures(input_image, &hu_moments);
-  for (int i = 0; i < 0; i++) {
+  hu_->ExtractFeatures(deskewed, &hu_moments);
+  for (int i = 0; i < 7; i++) {
     feature_vector->push_back(float(hu_moments.at<double>(0, i)));
   }
-  *feature_vector = feature_vector->t();
+  */
 }
