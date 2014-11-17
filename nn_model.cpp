@@ -36,7 +36,7 @@ void NNModel::Predict(const cv::Mat& test_vectors, cv::Mat* predicted_labels) {
   // Prediction result is index of maximum
   for (int i = 0; i < responses.rows; i++) {
     cv::Mat row = responses.row(i);
-    float max_seen = 0;
+    float max_seen = -100000;
     int max_index = 0;
     for (int j = 0; j < row.cols; j++) {
       float k = row.at<float>(0, j);

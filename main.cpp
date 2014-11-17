@@ -108,7 +108,7 @@ int main(int argc, char* argv[]) {
   }
   */
 
-  NNModel model;
+  PCAModel<NNModel> model;
   NoPixelVectorizer vectorizer;
 
   // Use only the first n test examples (for debugging)
