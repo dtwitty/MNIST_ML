@@ -12,6 +12,8 @@
 #include "morphological_pre_processor.hpp"
 #include "euler_number_extractor.hpp"
 #include "pca_model.hpp"
+#include "no_pixel_vectorizer.hpp"
+#include "deskew_pre_processor.hpp"
 
 #define MNIST_TRAINING_IMAGE_FILE "../MNIST/train-images-idx3-ubyte"
 #define MNIST_TESTING_IMAGE_FILE "../MNIST/t10k-images-idx3-ubyte"
@@ -91,28 +93,23 @@ int main(int argc, char* argv[]) {
   /*
   EulerNumberExtractor euler(50);
   MorphologicalPreProcessor morph(2, 2, ELLIPSE, CLOSE);
-
-  for (cv::Mat& image : training_images) {
-    cv::Mat out;
-    morph.PreProcess(image, &out);
-    image = out;
-  }
+*/
+  DeskewPreProcessor deskew;
+  /*
   for (int i = 0; i < 100; i++) {
-    int label = training_labels.at<float>(0,i);
-    int euler_number = euler.GetEulerNumber(training_images[i]);
-    printf("Label: %d, Euler number: %d\n", label, euler_number);
-    if (euler_number > -5) {
       cv::Mat image = training_images[i];
       cv::namedWindow( "Display window", cv::WINDOW_AUTOSIZE );
       cv::imshow( "Display window", image );
-
       cv::waitKey(0);
-    }
+      deskew.PreProcess(training_images[i], &image);
+      cv::namedWindow( "Display window", cv::WINDOW_AUTOSIZE );
+      cv::imshow( "Display window", image );
+      cv::waitKey(0);
   }
   */
 
   NNModel model;
-  BlurredPixelVectorizer vectorizer(1, 1);
+  NoPixelVectorizer vectorizer;
 
   // Use only the first n test examples (for debugging)
   training_images.resize(60000);

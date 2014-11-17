@@ -1,4 +1,6 @@
 #include "no_pixel_vectorizer.hpp"
+#include "pixel_data_feature_extractor.hpp"
+#include "deskew_pre_processor.hpp"
 #include <iostream>
 
 NoPixelVectorizer::NoPixelVectorizer()
@@ -6,8 +8,16 @@ NoPixelVectorizer::NoPixelVectorizer()
       euler_(new EulerNumberExtractor(50)),
       hu_(new HuMomentsExtractor()) {}
 
-void NoPixelVectorizer::Vectorize(const cv::Mat& input_image,
+void NoPixelVectorizer::Vectorize(const cv::Mat& input_imag,
                              cv::Mat* feature_vector) const {
+  cv::Mat input_image;
+  DeskewPreProcessor deskew;
+  deskew.PreProcess(input_imag, &input_image);
+  /*
+  PixelDataFeatureExtractor pe;
+  pe.ExtractFeatures(input_image, feature_vector);
+  *feature_vector = feature_vector->t();
+  */
   // Close the image
   cv::Mat closed;
   morph_->PreProcess(input_image, &closed);
