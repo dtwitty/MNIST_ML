@@ -32,9 +32,9 @@ class KNNModel : public Model {
   void Load(const std::string& filename);
 
  private:
- 	std::unique_ptr<CvKNearest> knn_;
- 	int max_k;
- 	bool regression;
+  std::unique_ptr<CvKNearest> knn_;
+  int max_k;
+  bool regression;
 };
 
 #endif  // KNN_MODEL
