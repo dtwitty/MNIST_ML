@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
   }
   */
 
-  PCAModel<KNNModel> model(10);
+  NNModel model;
   NoPixelVectorizer vectorizer;
 
   // Use only the first n test examples (for debugging)

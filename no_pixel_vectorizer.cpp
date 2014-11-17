@@ -2,6 +2,7 @@
 #include "pixel_data_feature_extractor.hpp"
 #include "deskew_pre_processor.hpp"
 #include "blur_pre_processor.hpp"
+#include "hog_extractor.hpp"
 #include <iostream>
 
 NoPixelVectorizer::NoPixelVectorizer()
@@ -18,8 +19,8 @@ void NoPixelVectorizer::Vectorize(const cv::Mat& input_ima,
   BlurPreProcessor blur(1,1);
   blur.PreProcess(input_imag, &input_image);
   
-  PixelDataFeatureExtractor pe;
-  pe.ExtractFeatures(input_image, feature_vector);
+  HOGExtractor hog;
+  hog.ExtractFeatures(input_image, feature_vector);
   *feature_vector = feature_vector->t();
   
  
@@ -34,9 +35,8 @@ void NoPixelVectorizer::Vectorize(const cv::Mat& input_ima,
   // Get Hu Moments
   cv::Mat hu_moments;
   hu_->ExtractFeatures(input_image, &hu_moments);
-  for (int i = 0; i < 7; i++) {
+  for (int i = 0; i < 0; i++) {
     feature_vector->push_back(float(hu_moments.at<double>(0, i)));
   }
   *feature_vector = feature_vector->t();
-  
 }
