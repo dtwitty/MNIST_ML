@@ -14,6 +14,7 @@
 #include "pca_model.hpp"
 #include "no_pixel_vectorizer.hpp"
 #include "deskew_pre_processor.hpp"
+#include "knn_model.hpp"
 
 #define MNIST_TRAINING_IMAGE_FILE "../MNIST/train-images-idx3-ubyte"
 #define MNIST_TESTING_IMAGE_FILE "../MNIST/t10k-images-idx3-ubyte"
@@ -108,7 +109,7 @@ int main(int argc, char* argv[]) {
   }
   */
 
-  PCAModel<NNModel> model;
+  PCAModel<KNNModel> model(10);
   NoPixelVectorizer vectorizer;
 
   // Use only the first n test examples (for debugging)

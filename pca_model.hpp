@@ -13,10 +13,11 @@
 
 #include "model.hpp"
 
-template <class ModelType, class... Args>
+template <class ModelType>
 class PCAModel : public Model {
  public:
   // Arguments are passed to constructor of ModelType
+  template <class... Args>
   PCAModel(Args&&... args) {
     pca_.reset(new cv::PCA);
     model_.reset(new ModelType(args...));

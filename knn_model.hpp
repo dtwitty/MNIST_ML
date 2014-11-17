@@ -15,17 +15,11 @@
 
 class KNNModel : public Model {
  public:
-  KNNModel();
-  KNNModel(int maximum_k);
-  KNNModel(int maximum_k, bool is_regression);
-
-  void SetRegression(bool is_regression);
-  void SetMaxK(int maximum_k);
+  KNNModel(int k);
 
   void Train(const cv::Mat& training_vectors, const cv::Mat& training_labels);
 
   void Predict(const cv::Mat& test_vectors, cv::Mat* predicted_labels);
-  void PredictK(const cv::Mat& test_vectors, cv::Mat* predicted_labels, int k);
 
   void Write(const std::string& filename);
 
@@ -33,8 +27,7 @@ class KNNModel : public Model {
 
  private:
   std::unique_ptr<CvKNearest> knn_;
-  int max_k;
-  bool regression;
+  int k_;
 };
 
 #endif  // KNN_MODEL
