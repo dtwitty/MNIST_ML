@@ -32,6 +32,37 @@ void ImageSetToFeatureSet(const Vectorizer& vectorizer,
   }
 }
 
+void GenerateImage(const std::vector<Vectorizer*>& vectorizers,
+                   const std::vector<cv::Mat>& image_set,
+                   int num_cols,
+                   const char* filename){
+  int num_rows = (image_set.size() + num_cols - 1) / num_cols;
+  cv::Mat image_set_complete = cv::Mat::zeros(num_rows * 28, num_cols * 28, CV_8UC1);
+  std::cout << image_set_complete.size() << std::endl;
+  for (int row = 0; row < num_rows; row++){
+    for (int col = 0; col < num_cols; col++){
+      if (row * num_cols + col >= image_set.size())
+        break;
+      cv::Mat output;
+      if (vectorizers.size() == 0){
+        output = image_set[row * num_cols + col];
+      }
+      else{
+        vectorizers[0]->Vectorize(image_set[row * num_cols + col], &output);
+        for (int i = 1; i < vectorizers.size(); i++){
+          cv::Mat tmp;
+          vectorizers[i]->Vectorize(output, &tmp);
+          output = tmp;
+        }
+      }
+      //cv::normalize(output, output);
+      cv::Mat roi = image_set_complete(cv::Rect(col * 28, row * 28, 28, 28));
+      output.copyTo(roi);
+    }
+  }
+  imwrite(filename, image_set_complete);
+}
+
 void TrainAndTest(Model& model, const Vectorizer& vectorizer,
                   const std::vector<cv::Mat>& training_images,
                   const cv::Mat& training_labels,
@@ -88,7 +119,7 @@ void TrainAndTest(Model& model, const Vectorizer& vectorizer,
       ind++;
     }
   }
-  imwrite("Failed.jpg", failed_image);
+  imwrite("Failed.png", failed_image);
 
   std::cout << "Got " << correct << " out of " << count << std::endl;
   std::cout << "Confusion matrix: Row is label, column is prediction"
@@ -124,20 +155,25 @@ int main(int argc, char* argv[]) {
 
   std::cout << "Finished loading MNIST" << std::endl;
 
+  // NoPixelVectorizer tester;  // Just edit the NoPixelVectorizer to do what you want...
+  // std::vector<Vectorizer*> vectorizers;
+  // vectorizers.push_back(&tester);
+  // GenerateImage(vectorizers, testing_images, 100, "testing_images_deskewed_blurred_morphed.png");
+
   // Use only the first n test examples (for debugging)
-  training_images.resize(60000);
-  training_labels.resize(60000);
+  // training_images.resize(60000);
+  // training_labels.resize(60000);
 
-  testing_images.resize(10000);
-  testing_labels.resize(10000);
+  // testing_images.resize(10000);
+  // testing_labels.resize(10000);
 
-  {
-    std::cout << std::endl << "KNN model" << std::endl;
+  // {
+  //   std::cout << std::endl << "KNN model" << std::endl;
 
-    PCAModel<KNNModel> model(5);
-    NoPixelVectorizer vectorizer;
+  //   PCAModel<KNNModel> model(5);
+  //   NoPixelVectorizer vectorizer;
 
-    TrainAndTest(model, vectorizer, training_images, training_labels,
-                 testing_images, testing_labels);
-  }
+  //   TrainAndTest(model, vectorizer, training_images, training_labels,
+  //                testing_images, testing_labels);
+  // }
 }
