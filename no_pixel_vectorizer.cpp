@@ -27,6 +27,11 @@ void NoPixelVectorizer::Vectorize(const cv::Mat& input_image,
   BlurPreProcessor blur(2,2);
   cv::Mat blurred = blur(deskewed);
 
+  PixelDataFeatureExtractor pe;
+  pe.ExtractFeatures(blurred, feature_vector);
+
+  *feature_vector = *feature_vector / 255.0 * 2 - 1;
+   /*
   // Hough Transform
   //cv::Mat unused;
   //hough_->ExtractFeatures(blurred, &unused);
@@ -68,5 +73,5 @@ void NoPixelVectorizer::Vectorize(const cv::Mat& input_image,
   //*feature_vector = feature_vector->t();
 
   cv::normalize(*feature_vector, *feature_vector);
-
+  */
 }
