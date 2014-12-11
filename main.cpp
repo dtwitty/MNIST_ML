@@ -155,25 +155,33 @@ int main(int argc, char* argv[]) {
 
   std::cout << "Finished loading MNIST" << std::endl;
 
-  // NoPixelVectorizer tester;  // Just edit the NoPixelVectorizer to do what you want...
-  // std::vector<Vectorizer*> vectorizers;
-  // vectorizers.push_back(&tester);
-  // GenerateImage(vectorizers, testing_images, 100, "testing_images_deskewed_blurred_morphed.png");
+  NoPixelVectorizer tester;  // Just edit the NoPixelVectorizer to do what you want...
+  std::vector<Vectorizer*> vectorizers;
+  vectorizers.push_back(&tester);
+  //GenerateImage(vectorizers, testing_images, 10, "testing_images_deskewed_blurred_morphed.png");
 
   // Use only the first n test examples (for debugging)
-  // training_images.resize(60000);
-  // training_labels.resize(60000);
+  training_images.resize(60000);
+  training_labels.resize(60000);
 
-  // testing_images.resize(10000);
-  // testing_labels.resize(10000);
+  testing_images.resize(10000);
+  testing_labels.resize(10000);
 
-  // {
-  //   std::cout << std::endl << "KNN model" << std::endl;
+  {
+     KNNModel modelknn(5);
+     SVMModel modelsvm;
+     NNModel modelnn;
 
-  //   PCAModel<KNNModel> model(5);
-  //   NoPixelVectorizer vectorizer;
-
-  //   TrainAndTest(model, vectorizer, training_images, training_labels,
-  //                testing_images, testing_labels);
-  // }
+     NoPixelVectorizer vectorizer;
+	
+     std::cout << "KNN" << std::endl;
+     TrainAndTest(modelknn, vectorizer, training_images, training_labels,
+                  testing_images, testing_labels);
+     std::cout << "NN" << std::endl;
+     TrainAndTest(modelnn, vectorizer, training_images, training_labels,
+                  testing_images, testing_labels);   
+     std::cout << "SVM" << std::endl;
+     TrainAndTest(modelsvm, vectorizer, training_images, training_labels,
+                  testing_images, testing_labels);
+  }
 }

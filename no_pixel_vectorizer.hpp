@@ -14,6 +14,7 @@
 #include "morphological_pre_processor.hpp"
 #include "euler_number_extractor.hpp"
 #include "hu_moments_extractor.hpp"
+#include "hough_transform_extractor.hpp"
 
 class NoPixelVectorizer : public Vectorizer {
  public:
@@ -25,6 +26,7 @@ class NoPixelVectorizer : public Vectorizer {
   std::unique_ptr<MorphologicalPreProcessor> morph_;
   std::unique_ptr<EulerNumberExtractor> euler_;
   std::unique_ptr<HuMomentsExtractor> hu_;
+  std::unique_ptr<HoughTransformExtractor> hough_;
 };
 
 #endif  // NO_PIXEL_VECTORIZER
